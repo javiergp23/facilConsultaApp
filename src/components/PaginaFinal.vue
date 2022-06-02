@@ -132,8 +132,5 @@
     box-shadow: none;
     width: 150px;
   }
-
-
 }
-
 </style>

@@ -45,7 +45,7 @@
             </div>
           </form>
           <router-link to="/PaginaDosViews">
-            <ButtonCadastro :morado="true" proximo="PRÓXIMO"/>
+            <ButtonCadastro :morado="true" proximo="PRÓXIMO" type="submit"/>
           </router-link>
         </div>
         <div class="col-6 imgUno">
@@ -60,7 +60,6 @@
 import { required, minLength, numeric, maxLength } from "@vuelidate/validators"
 import ButtonCadastro from './button/ButtonCadastro.vue';
 
-
   export default {  
     name: 'PaginaUno',
     components: { 
@@ -68,6 +67,7 @@ import ButtonCadastro from './button/ButtonCadastro.vue';
     },
     data() {  
       return{  
+          users: [],
           nome: "",
           cpf: "",  
           celular: "",
@@ -83,6 +83,9 @@ import ButtonCadastro from './button/ButtonCadastro.vue';
           
       }
     },
+    created() { 
+      this.listUsers();
+    },
 
     methods: {
       validar() { 
@@ -91,6 +94,11 @@ import ButtonCadastro from './button/ButtonCadastro.vue';
             return;
           }
           console.log("Formulario valido");
+      },
+      listUsers: async function () { 
+        const res = await fetch('https://api-teste-front-end-fc.herokuapp.com/profissionais');
+        const data = await res.json();
+        console.log(data)
       }
     }
 

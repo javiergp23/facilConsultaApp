@@ -265,7 +265,6 @@ text-decoration: none;
   box-shadow: 0px 1px 2px #8a8a8a;
 }
 
-
 .titleCheck{ 
   font-size: 12px;
 }
@@ -319,7 +318,7 @@ text-decoration: none;
 
 .hello{ 
   height: 650px;
-  width: 25em;
+  width: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
