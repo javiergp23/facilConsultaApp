@@ -11,8 +11,8 @@
           <form>
             <div class="mb-3">
               <label for="disabledSelect" class="form-label">Especialidade princial*</label>
-                <select id="disabledSelect" class="form-select">
-                <option class="selecion">Selecione especialidade</option>
+                <select  name="especialidades" id="especialidades" v-model="especialidades" class="form-select">
+                <option class="selecion" v-for="especialidades in especialidades" :key="especialidades.id" :value="especialidades.nome">{{especialidades.nome}}</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -102,6 +102,22 @@
     name: 'PaginaUno',
     components: { 
       ButtonCadastro
+    },
+    data() {  
+      return{  
+          especialidades: null, 
+      }
+    },
+    methods: {
+      async getEspecialidades() { 
+        const req = await fetch('https://api-teste-front-end-fc.herokuapp.com/especialidades');
+        const data = await req.json();
+
+        this.especialidades = data;
+      },
+    },
+    mounted() {
+      this.getEspecialidades()
     }
   }
 

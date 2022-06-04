@@ -5,36 +5,33 @@
         <h1 class="titleUno">Sobre o profissional</h1>
         <div class="col-6 divUno">
           <h2 class="dadosSubTitle">Dados do profissional</h2>
-          <form v-on:submit.prevent="PRÓXIMO">
+          <form >
             <div class="mb-3">
-              <label class="form-label">Nome completo*</label>
-              <input type="text" class="form-control divNome" v-model="nome" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Digite o nome completo">
-              <div v-if="enviado && !$v.nome.required" class="mensajeError">
-                  Tem escrivir um nome
-              </div>
+              <label for="nome" class="form-label">Nome completo*</label>
+              <input type="text" class="form-control divNome" id="nome" v-model="nome" aria-describedby="emailHelp" placeholder="Digite o nome completo">
+              
             </div>
             <div class="mb-3">
-              <label  class="form-label">CPF*</label>
-              <input type="text" class="form-control divCPF" v-model="cpf" id="exampleInputPassword1" placeholder="Digite um CPF">
-              <div v-if="enviado && !$v.cpf.required" class="mensajeError">
-                  Tem escrivir um cpf
-              </div>
+              <label for="cpf"  class="form-label">CPF*</label>
+              <input type="text" class="form-control divCPF" id="cpf" v-model="cpf" placeholder="Digite um CPF">
+              
             </div>
             <div class="mb-3">
-              <label class="form-label">Número de cedular*</label>
-              <input type="text" class="form-control divCelular" v-model="celular" id="exampleInputPassword1" placeholder="(00) 0 0000-0000">
+              <label for="celular" class="form-label">Número de cedular*</label>
+              <input type="text" class="form-control divCelular" id="celular" v-model="celular"  placeholder="(00) 0 0000-0000">
+              
             </div>
             <div class="row">
               <div class="mb-3 col">
                 <label for="disabledSelect" class="form-label">Estado*</label>
-                <select id="disabledSelect" class="form-select">
-                <option class="selecion">Selecione</option>
+                <select name="estado" id="estado" v-model="estados" class="form-select">
+                <option v-for="estados in estados" :key="estados.id" :value="estados.nome" class="selecion">{{estados.nome}}</option>
                 </select>
               </div>
               <div class="mb-3 col">
-                <label for="disabledSelect" class="form-label">Cidade*</label>
-                <select id="disabledSelect" class="form-select">
-                <option class="selecion" >Selecione</option>
+                <label for="cidade" class="form-label">Cidade*</label>
+                <select name="cidade" id="cidade" v-model="cidades"  class="form-select">.
+                <option v-for="cidades in cidades" :key="cidades.id" :value="cidades.nome" class="selecion"> {{cidades.nome}}</option>
                 </select>
               </div>
             </div>
@@ -57,49 +54,44 @@
 </template>
 
 <script>
-import { required, minLength, numeric, maxLength } from "@vuelidate/validators"
 import ButtonCadastro from './button/ButtonCadastro.vue';
 
   export default {  
     name: 'PaginaUno',
     components: { 
-      ButtonCadastro
+      ButtonCadastro,
     },
     data() {  
       return{  
-          users: [],
           nome: "",
           cpf: "",  
           celular: "",
-          enviado: false
+          cidades: null,
+          estados: null,
+          cidade: null,
+          estado: null,
+          enviado: false,
       }
     },
-
-    validations() { 
-      return{ 
-          nome: { required, minLength: minLength(3), maxLength: maxLength(48)},
-          cpf: { required, minLength: minLength(1), maxLength: maxLength(11), numeric},  
-          celular: { required, minLength: minLength(1), maxLength: maxLength(11), numeric}
-          
-      }
-    },
-    created() { 
-      this.listUsers();
-    },
-
+    
     methods: {
-      validar() { 
-          this.enviado=true;
-          if (this.$v.$invalid) { 
-            return;
-          }
-          console.log("Formulario valido");
+      
+      async getEstados() { 
+        const req = await fetch('https://api-teste-front-end-fc.herokuapp.com/estados');
+        const data = await req.json();
+
+        this.estados = data;
       },
-      listUsers: async function () { 
-        const res = await fetch('https://api-teste-front-end-fc.herokuapp.com/profissionais');
-        const data = await res.json();
-        console.log(data)
-      }
+      async getCidades() { 
+        const req = await fetch('https://api-teste-front-end-fc.herokuapp.com/cidades');
+        const data = await req.json();
+
+        this.cidades = data;
+      },
+    },
+    mounted() {
+      this.getCidades()
+      this.getEstados()
     }
 
   } 
